@@ -3,21 +3,26 @@ import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+/**
+ * This class models an instance of the server part of the broadcaster process, that listens to the line for
+ * reception of a child node on the broadcast tree via a server
+ * socket, and casts EACH incoming TCP connection as an independent ServerThread object
+ */
 public class Server extends Thread
 {
-    private ServerSocket mServerSocket;
-    ServerThread mServerThread;
     /**
-     * The data to be broadcasted
+     * Instance of the server socket that listens to the line and accepts incomming conenctions
      */
-//    private String mData;
+    private ServerSocket mServerSocket;
 
+    /**
+     * Instance of the server thread that hosts an incoming received connection from a child node
+     */
+    private ServerThread mServerThread;
 
-    public static final int DEFAULT_SERVER_PORT = 4444;
     /**
      * Initiates a server socket on the input port, listens to the line, on receiving an incoming
-     * connection creates and starts a ServerThread on the client
+     * connection creates and starts a ServerThread on the child node
      * @param port
      */
     public Server(int port)
@@ -35,6 +40,9 @@ public class Server extends Thread
         }
     }
 
+    /**
+     * Instantly listions to the line to accept a new connection on an independent thread
+     */
     public void run()
     {
         while (true)
@@ -43,15 +51,9 @@ public class Server extends Thread
         }
     }
 
-//    public void setData(String data)
-//    {
-//        mData = data;
-//        if(mServerThread != null)
-//            mServerThread.setData(data);
-//    }
 
     /**
-     * Listens to the line and starts a connection on receiving a request from the client
+     * Listens to the line and starts a connection on receiving a request from the client (i.e., child node on the broadcast tree)
      * The connection is started and initiated as a ServerThread object
      */
     private void ListenAndAccept()

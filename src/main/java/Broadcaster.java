@@ -1,4 +1,8 @@
-
+/**
+ * This class models a broadcaster process, which consists of a server and client part. Client part connects to the specified
+ * parent node in the broadcast tree to receive the update state of the root node, and upon receiving an update, the server part
+ * does the broadcast to the children nodes i.e., the set of open, and active TCP connections with the server part of the Broadcaster
+ */
 public class Broadcaster
 {
     /**
@@ -12,13 +16,12 @@ public class Broadcaster
     Client mClient;
 
     /**
-     * The data of interest that is broadcasted from parent
-     * to childeren over this broadcast tree. Each node receives the data
-     * from its parent node, and broadcasts it to its children
+     *
+     * @param myPort port number of this broadcaster process (for the server part)
+     * @param parentPort port number of the parent node on the broadcast tree (for the client part)
+     * @param parentIP IP address of the parent node on the broadcast tree (for the client part)
      */
-
-
-    public Broadcaster(int myPort, int serverPort, String serverIP)
+    public Broadcaster(int myPort, int parentPort, String parentIP)
     {
         /*
         Establishes a server on the port determined by myPort
@@ -26,23 +29,16 @@ public class Broadcaster
         mServer = new Server(myPort);
         mServer.start();
 
+
         /*
         Initiates a connection to the specified server on (serverIP and serverPort) if the node is not
         root
          */
-        if ((!serverIP.equalsIgnoreCase(Main.ROOT) && serverPort != -1))
+        if ((!parentIP.equalsIgnoreCase(Main.ROOT) && parentPort != -1))
         {
-            mClient = new Client(serverIP, serverPort);
-            mClient.start();
+            mClient = new Client(parentIP, parentPort);
         }
 
 
     }
-
-
-//    public void setData(String data)
-//    {
-//        mData = data;
-//        mServer.setData(data);
-//    }
 }
